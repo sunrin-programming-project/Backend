@@ -8,16 +8,16 @@ import { MailerModule } from '@nestjs-modules/mailer';
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: '.com',
-        port: 587,
+        host: process.env.MailHost,
+        port: Number(process.env.MailPort),
         secure: false,
         auth: {
-          user: '',
-          pass: ''
+          user: process.env.MailUser,
+          pass: process.env.MailPass,
         }
       },
       defaults: {
-        from: '"nest-modules" <modules@nestjs.com>',
+        from: process.env.MailFrom,
       },
       template: {
         dir: __dirname + '/templates',
