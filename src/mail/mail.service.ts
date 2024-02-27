@@ -7,8 +7,8 @@ export class MailService {
     
     async sendUserConfirmation() {
         await this.mailerService.sendMail({
-            to: '',
-            from: '',
+            to: 'op@ye0ngjae.com',
+            from: 'contest@ye0ngjae.com',
             subject: 'Testing Nest MailerModule ✔',
             text: 'welcome',
             html: '<b>welcome</b>',
