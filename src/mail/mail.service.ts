@@ -5,15 +5,14 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
     constructor(private readonly mailerService: MailerService) {}
     
-    async sendUserConfirmation() {
+    async sendTestMail() {
         await this.mailerService.sendMail({
-            to: 'op@ye0ngjae.com',
+            to: 'kimjh38012@outlook.com',
             from: 'contest@ye0ngjae.com',
-            subject: 'Testing Nest MailerModule ✔',
-            text: 'welcome',
-            html: '<b>welcome</b>',
+            subject: 'Testing Nest Mailer',
+            text: 'Testing Nest Mailer',
+            html: '<b>Testing Nest Mailer</b>',
         });
-        return 'success';
     }
     
 }
