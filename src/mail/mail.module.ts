@@ -9,16 +9,16 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: process.env.MailHost ,
-        port: Number(process.env.MailPort),
+        host: 'smtp.gmail.com',
+        port: 587,
         secure: false,
         auth: {
-          user: process.env.MailUser,
-          pass: process.env.MailPass,
+          user: 'ye0ngjae.project@gmail.com',
+          pass: 'tlxhhxusphtgbzoy',
         },
       },
       defaults: {
-        from: process.env.MailFrom,
+        from: '"IT 대회 뉴스레터" <contest@ye0ngjae.com>',
       },
       template: {
         dir: __dirname + '/templates',

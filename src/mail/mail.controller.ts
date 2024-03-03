@@ -8,7 +8,7 @@ export class MailController {
 
     @Get()
     async sendUserConfirmation() {
-        return await this.mailServeice.sendUserConfirmation();
+        return await this.mailServeice.sendTestMail();
     }
 
 }
