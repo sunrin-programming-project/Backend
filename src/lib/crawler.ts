@@ -1,6 +1,7 @@
 import { JSDOM } from 'jsdom';
 
 interface ContestList {
+    url: string;
     title: string;
     like: string;
     host: string;
@@ -58,6 +59,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
 
     for(let i = 0; i < filteredArr.length; i += 12) {
         if (filteredArr[i]) {
+            let url = filteredArr[i].split(' ')[0];
             let like = filteredArr[i].charAt(filteredArr[i].length-1);
             let title = filteredArr[i].slice(0, -1);
             let host = filteredArr[i+2] ? filteredArr[i+2].slice(1) : '';
@@ -68,6 +70,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             let dday = filteredArr[i+10] ? filteredArr[i+10].slice(5) : '';
             
             contest.push({
+              url: url,
               title: title,
               like: like,
               host: host,
