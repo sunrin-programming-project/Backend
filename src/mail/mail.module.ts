@@ -22,7 +22,7 @@ import { ConfigModule } from '@nestjs/config';
         from: process.env.MailFrom,
       },
       template: {
-        dir: __dirname + '/src/mail/templates/',
+        dir: process.cwd() + '/src/mail/templates/',
         adapter: new HandlebarsAdapter(), 
         options: {  
           strict: true,

@@ -4,24 +4,16 @@ import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class MailService {
     constructor(private readonly mailerService: MailerService) {}
-    
-    async sendTestMail() {
-        await this.mailerService.sendMail({
-            to: 'kimjh38012@outlook.com',
-            subject: 'Testing Nest Mailer',
-            text: 'Testing Nest Mailer',
-            html: '<b>Testing Nest Mailer</b>',
-        });
-    }
 
-    async sendMailWithTemplate(email: string, subject:string, template: string, context: any) {
+    async sendVertifyMail(email: string, context: any) {
         await this.mailerService.sendMail({
             to: email,
-            subject: subject,
-            template: template,
+            subject: '이메일 인증 요청',
+            template: 'vertify',
             context: {
                 name: context.name,
-                time: new Date().toLocaleTimeString()
+                time: new Date().toLocaleTimeString(),
+                url: 'http://localhost:3000/vertify'
             },
         });
     }

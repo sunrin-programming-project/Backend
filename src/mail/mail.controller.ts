@@ -7,8 +7,8 @@ export class MailController {
     constructor(private readonly mailServeice:MailService) {}
 
     @Get()
-    async sendUserConfirmation() {
-        return await this.mailServeice.sendTestMail();
+    async sendVertifyMail() {
+        return await this.mailServeice.sendVertifyMail('op@ye0ngjae.com', {name: 'test'});
     }
 
 }
