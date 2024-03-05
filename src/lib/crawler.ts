@@ -3,7 +3,6 @@ import { JSDOM } from 'jsdom';
 interface ContestList {
     url: string;
     title: string;
-    like: string;
     host: string;
     target: string;
     register: string;
@@ -12,6 +11,26 @@ interface ContestList {
     status: string;
     dday: string;
 }
+
+const filter_list = [
+    '문학•문예',
+    '네이밍•슬로건',
+    '경시•학문•논문',
+    '과학•공학•기술',
+    'IT•소프트웨어•게임',
+    '스포츠',
+    '그림•미술',
+    '디자인•캐릭터•웹툰',
+    '콩쿠르•성악•국악•동요',
+    '음악•가요•댄스•무용',
+    '뷰티•선발•배우•오디션',
+    '사 진',
+    'UCC•동영상',
+    '아이디어•제안',
+    '산업•사회•건축•관광•창업',
+    '취미•이색•반려동물',
+    '요리•음식•식품'
+]
 
 async function ITContestCrawl(): Promise<ContestList[]> {
     const contestkorea_data = new URLSearchParams({
@@ -41,26 +60,34 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
         method: "POST",
         body: data
     });
-    const htmlString: string = await response.text();
 
+    const htmlString: string = await response.text();
     const dom = new JSDOM(htmlString);
+    
     let contest_list: string[] = dom.window.document.querySelector('.list_style_2').textContent.replace(/\s{3,}/g, '').replace(/IT•소프트웨어•게임/g, '').trim().split(/ \.|(접수중)|(마감임박)|(주최)|(대상)|(접수)|(심사)|(발표)/);
+
     let filteredArr: string[] = contest_list.filter(function(item: string) {
         return item !== undefined && item !== undefined && item !== null && item.trim() !== '';
     });
 
     let contest: ContestList[] = [];
 
-    for (let i = 0; i < filteredArr.length; i++) {
+    for(let i = 0; i < filteredArr.length; i++) {
         if(filteredArr[i] === '￦ 유료 ') {
             filteredArr.splice(i, 2);
        }
-    }
+        for(let j = 0; j < filter_list.length; j++) {
+          if(filteredArr[i].includes(filter_list[j])) {
+            filteredArr[i] = filteredArr[i].replace(filter_list[j], '');
+          }
+        }
+      }
+
+    //console.log(filteredArr)
 
     for(let i = 0; i < filteredArr.length; i += 12) {
         if (filteredArr[i]) {
             let url = filteredArr[i].split(' ')[0];
-            let like = filteredArr[i].charAt(filteredArr[i].length-1);
             let title = filteredArr[i].slice(0, -1);
             let host = filteredArr[i+2] ? filteredArr[i+2].slice(1) : '';
             let target = filteredArr[i+4] ? filteredArr[i+4].replace(/,/g,', ') : '';
@@ -72,7 +99,6 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             contest.push({
               url: url,
               title: title,
-              like: like,
               host: host,
               target: target,
               register: register,
