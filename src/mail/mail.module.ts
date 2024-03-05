@@ -7,11 +7,12 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MailerModule.forRoot({
       transport: {
         host: process.env.MailHost,
         port: Number(process.env.MailPort),
-        secure: false,
+        secure: true,
         auth: {
           user: process.env.MailUser,
           pass: process.env.MailPass,
@@ -21,7 +22,7 @@ import { ConfigModule } from '@nestjs/config';
         from: process.env.MailFrom,
       },
       template: {
-        dir: __dirname + '/templates',
+        dir: __dirname + '/src/mail/templates/',
         adapter: new HandlebarsAdapter(), 
         options: {  
           strict: true,

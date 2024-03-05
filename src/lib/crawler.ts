@@ -69,7 +69,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             let register = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
             let review = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
             let announce = filteredArr[i+10] ? filteredArr[i+10].slice(0, 5) : '';
-            let dday = filteredArr[i+10] ? filteredArr[i+10].slice(5, 8) : '';
+            let dday = filteredArr[i+10] ? filteredArr[i+10].slice(5) : '';
             
             contest.push({
               title: title,
