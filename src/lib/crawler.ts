@@ -23,7 +23,7 @@ async function ITContestCrawl(): Promise<ContestList[]> {
         "Txt_comment": "",
         "Txt_resultyn": "",
         "Txt_actcode": "",
-        "Txt_sortkey": "a.str_aedate",
+        "Txt_sortkey": "a.str_aedate",  
         "Txt_sortword": "asc",
         "Txt_code1[]": "29",
         "Txt_bname": "IT•소프트웨어•게임",
@@ -50,15 +50,11 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
 
     let contest: ContestList[] = [];
 
-    
-
     for (let i = 0; i < filteredArr.length; i++) {
         if(filteredArr[i] === '￦ 유료 ') {
             filteredArr.splice(i, 2);
        }
     }
-
-    console.log(filteredArr)
 
     for(let i = 0; i < filteredArr.length; i += 12) {
         if (filteredArr[i]) {

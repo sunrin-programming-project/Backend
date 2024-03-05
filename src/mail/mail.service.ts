@@ -13,7 +13,33 @@ export class MailService {
             context: {
                 name: context.name,
                 time: new Date().toLocaleTimeString(),
-                url: 'http://localhost:3000/vertify'
+                url: context.url
+            },
+        });
+    }
+
+    async sendResetMail(email: string, context: any) {
+        await this.mailerService.sendMail({
+            to: email,
+            subject: '비밀번호 재설정 요청',
+            template: 'reset',
+            context: {
+                name: context.name,
+                time: new Date().toLocaleTimeString(),
+                url: context.url
+            },
+        });
+    }
+
+    async SendContestMail(email: string, context: any) {
+        await this.mailerService.sendMail({
+            to: email,
+            subject: '최신 공모전 정보',
+            template: 'contest',
+            context: {
+                name: context.name,
+                time: new Date().toLocaleTimeString(),
+                contest: context.contest
             },
         });
     }
