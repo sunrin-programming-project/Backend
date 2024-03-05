@@ -80,9 +80,6 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             });
         }
     }
-    
-    
-    
 
     return contest;
 }

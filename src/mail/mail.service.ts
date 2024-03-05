@@ -31,14 +31,14 @@ export class MailService {
         });
     }
 
-    async SendContestMail(email: string, context: any) {
+    async sendContestMail(email: string, context: any) {
         await this.mailerService.sendMail({
             to: email,
             subject: '최신 공모전 정보',
             template: 'contest',
             context: {
                 name: context.name,
-                time: new Date().toLocaleTimeString(),
+                type: context.type,
                 contest: context.contest
             },
         });
