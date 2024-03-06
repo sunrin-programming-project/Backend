@@ -65,6 +65,9 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
     const dom = new JSDOM(htmlString);
     
     let contest_list: string[] = dom.window.document.querySelector('.list_style_2').textContent.replace(/\s{3,}/g, '').replace(/IT•소프트웨어•게임/g, '').trim().split(/ \.|(접수중)|(마감임박)|(주최)|(대상)|(접수)|(심사)|(발표)/);
+    
+    const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+    console.log(doc.querySelector('.list_style_2').querySelectorAll('a[href]'))
 
     let filteredArr: string[] = contest_list.filter(function(item: string) {
         return item !== undefined && item !== undefined && item !== null && item.trim() !== '';
