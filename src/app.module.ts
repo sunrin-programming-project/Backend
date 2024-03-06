@@ -5,9 +5,15 @@ import { MailModule } from './mail/mail.module';
 import { ContestController } from './contest/contest.controller';
 import { ContestModule } from './contest/contest.module';
 import { ContestService } from './contest/contest.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from './util/typeorm.config';
 
 @Module({
-  imports: [MailModule, ContestModule],
+  imports: [
+    MailModule, 
+    ContestModule,
+    TypeOrmModule.forRoot(typeORMConfig)
+  ],
   controllers: [AppController, ContestController],
   providers: [AppService, ContestService],
 })
