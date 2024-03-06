@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Contest } from 'src/contest/entities/contest.entity';
 
 
 export const typeORMConfig: TypeOrmModuleOptions = {
@@ -8,6 +9,6 @@ export const typeORMConfig: TypeOrmModuleOptions = {
     username: process.env.DBUser,
     password: process.env.DBPass,
     database: process.env.DBName,
-    entities: [],
+    entities: [Contest],
     synchronize: true
 }
