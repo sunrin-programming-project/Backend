@@ -6,4 +6,10 @@ export class ContestRepository extends Repository<Contest> {
     async createContest(contest: Contest): Promise<Contest> {
         return await this.save(contest);
     }
+
+    async getContestOrderByTitle(): Promise<Contest[]> {
+        return await this.createQueryBuilder('contest')
+            .orderBy('contest.title', 'ASC')
+            .getMany();
+    }
 }
