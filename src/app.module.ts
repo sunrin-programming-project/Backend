@@ -12,8 +12,8 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     MailModule, 
-    ContestModule,
     TypeOrmModule.forRoot(typeORMConfig),
+    ContestModule,
     UserModule
   ],
   controllers: [AppController, ContestController],

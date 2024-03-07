@@ -28,5 +28,8 @@ export class Contest {
 
     @Column()
     dday: string;
+
+    @Column()
+    url: string;
     
 }
