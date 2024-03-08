@@ -55,14 +55,15 @@ async function ITContestCrawl(): Promise<ContestList[]> {
 }
 
 async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]> {
-    const url: string = 'https://www.contestkorea.com/sub/list.php';
-    const response = await fetch(url, {
+    const ContestGetURL: string = 'https://www.contestkorea.com/sub/list.php';
+
+    let response = await fetch(ContestGetURL, {
         method: "POST",
         body: data
     });
 
-    const htmlString: string = await response.text();
-    const dom = new JSDOM(htmlString);
+    let htmlString: string = await response.text();
+    let dom = new JSDOM(htmlString);
     
     let contest_list: string[] = dom.window.document.querySelector('.list_style_2').textContent.replace(/\s{3,}/g, '').replace(/IT•소프트웨어•게임/g, '').trim().split(/ \.|(접수중)|(마감임박)|(주최)|(대상)|(접수)|(심사)|(발표)/);
 
@@ -70,6 +71,23 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
     dom.window.document.querySelector('.list_style_2').querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
         hrefTags.push(element.href);
     });
+
+    for(let i = 0; i < hrefTags.length; i++) {
+        hrefTags[i] = hrefTags[i].split('str_no=')[1];
+    }
+
+    let contest_link = [];
+
+    for (let i = 0; i < hrefTags.length; i++) {
+        let ContestLinkURL: string = `https://www.contestkorea.com/sub/view.php?str_no=${hrefTags[i]}`;
+        let response = await fetch(ContestLinkURL, {
+            method: "GET"
+        });
+        let htmlString: string = await response.text();
+        let dom = new JSDOM(htmlString);
+        contest_link.push(dom.window.document.querySelector('.txt_area').querySelector('a').href);
+    }
+    
 
     let filteredArr: string[] = contest_list.filter(function(item: string) {
         return item !== undefined && item !== undefined && item !== null && item.trim() !== '';
@@ -90,7 +108,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
 
     for(let i = 0; i < filteredArr.length; i += 12) {
         if (filteredArr[i]) {
-            let url = 'https://www.contestkorea.com/sub/' + hrefTags[i/12];
+            let url = contest_link[i/12];
             let title = filteredArr[i].slice(0, -1);
             let host = filteredArr[i+2] ? filteredArr[i+2].slice(1) : '';
             let target = filteredArr[i+4] ? filteredArr[i+4].replace(/,/g,', ') : '';
