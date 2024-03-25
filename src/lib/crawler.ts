@@ -83,12 +83,19 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
         let response = await fetch(ContestLinkURL, {
             method: "GET"
         });
+
         let htmlString: string = await response.text();
         let dom = new JSDOM(htmlString);
-        contest_link.push(dom.window.document.querySelector('.txt_area').querySelector('a').href);
+        const contest_url = dom.window.document.querySelector('.txt_area').querySelector('a').href;
+
+        if(contest_url.includes("accerror")){
+            contest_link.push('주최사 공고 없음');
+        }
+        else{
+            contest_link.push(contest_url);
+        }
     }
     
-
     let filteredArr: string[] = contest_list.filter(function(item: string) {
         return item !== undefined && item !== undefined && item !== null && item.trim() !== '';
     });
@@ -114,6 +121,9 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             let target = filteredArr[i+4] ? filteredArr[i+4].replace(/,/g,', ') : '';
             let register = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
             let review = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
+            if(review.includes('.')){
+                review = '미정';
+            }
             let announce = filteredArr[i+10] ? filteredArr[i+10].slice(0, 5) : '';
             let dday = filteredArr[i+10] ? filteredArr[i+10].slice(5) : '';
             
@@ -130,6 +140,8 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             });
         }
     }
+
+    console.log(contest);
 
     return contest;
 }
