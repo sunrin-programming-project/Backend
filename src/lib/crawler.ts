@@ -6,8 +6,6 @@ interface ContestList {
     host: string;
     target: string;
     register: string;
-    review: string;
-    announce: string;
     status: string;
     dday: string;
 }
@@ -113,6 +111,8 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
         }
       }
 
+    console.log(filteredArr)
+
     for(let i = 0; i < filteredArr.length; i += 12) {
         if (filteredArr[i]) {
             let url = contest_link[i/12];
@@ -120,12 +120,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             let host = filteredArr[i+2] ? filteredArr[i+2].slice(1) : '';
             let target = filteredArr[i+4] ? filteredArr[i+4].replace(/,/g,', ') : '';
             let register = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
-            let review = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
-            if(review.includes('.')){
-                review = '미정';
-            }
-            let announce = filteredArr[i+10] ? filteredArr[i+10].slice(0, 5) : '';
-            let dday = filteredArr[i+10] ? filteredArr[i+10].slice(5) : '';
+            let dday = filteredArr[i+8] ? filteredArr[i+8].slice(5) : '';
             
             contest.push({
               url: url,
@@ -133,8 +128,6 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
               host: host,
               target: target,
               register: register,
-              review: review,
-              announce: announce,
               status: filteredArr[i+11] ? filteredArr[i+11] : '',
               dday: dday
             });
