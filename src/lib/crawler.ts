@@ -63,7 +63,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
     let htmlString: string = await response.text();
     let dom = new JSDOM(htmlString);
     
-    let contest_list: string[] = dom.window.document.querySelector('.list_style_2').textContent.replace(/\s{3,}/g, '').replace(/IT•소프트웨어•게임/g, '').trim().split(/ \.|(접수중)|(마감임박)|(주최)|(대상)|(접수)|(심사)|(발표)/);
+    let contest_list: string[] = dom.window.document.querySelector('.list_style_2').textContent.replace(/\s{3,}/g, '').replace(/IT•소프트웨어•게임/g, '').trim().split(/ \.|(접수중)|(마감임박)|(주최)|(대상)|(접수)|D/);
 
     let hrefTags: string[] = [];
     dom.window.document.querySelector('.list_style_2').querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
@@ -113,14 +113,15 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
 
     console.log(filteredArr)
 
-    for(let i = 0; i < filteredArr.length; i += 12) {
+    for(let i = 0; i < filteredArr.length; i += 9) {
         if (filteredArr[i]) {
-            let url = contest_link[i/12];
+            let url = contest_link[i/9];
             let title = filteredArr[i].slice(0, -1);
             let host = filteredArr[i+2] ? filteredArr[i+2].slice(1) : '';
             let target = filteredArr[i+4] ? filteredArr[i+4].replace(/,/g,', ') : '';
-            let register = filteredArr[i+6] ? filteredArr[i+6].replace('~',' ~ ') : '';
-            let dday = filteredArr[i+8] ? filteredArr[i+8].slice(5) : '';
+            let register = filteredArr[i+6] ? filteredArr[i+6].slice(0, 11).replace('~',' ~ ') : '';
+            let status = filteredArr[i+8] ? filteredArr[i+8] : '';
+            let dday = 'D'+filteredArr[i+7] ? 'D'+filteredArr[i+7] : '';
             
             contest.push({
               url: url,
@@ -128,7 +129,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
               host: host,
               target: target,
               register: register,
-              status: filteredArr[i+11] ? filteredArr[i+11] : '',
+              status: status,
               dday: dday
             });
         }
