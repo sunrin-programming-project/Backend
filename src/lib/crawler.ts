@@ -111,8 +111,6 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
         }
       }
 
-    console.log(filteredArr)
-
     for(let i = 0; i < filteredArr.length; i += 9) {
         if (filteredArr[i]) {
             let url = contest_link[i/9];
@@ -134,8 +132,6 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             });
         }
     }
-
-    console.log(contest);
 
     return contest;
 }

@@ -8,7 +8,9 @@ import { Contest } from './entities/contest.entity';
   imports: [
     TypeOrmModule.forFeature([Contest])
   ],
-  providers: [ContestService],
+  providers: [
+    ContestService,
+  ],
   controllers: [ContestController],
 })
 export class ContestModule {}

@@ -9,11 +9,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './util/typeorm.config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     MailModule, 
     TypeOrmModule.forRoot(typeORMConfig),
+    ScheduleModule.forRoot(),
     ContestModule,
     UserModule,
     AuthModule

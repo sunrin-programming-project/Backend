@@ -1,17 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { HttpException, Injectable } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { ITContestCrawl } from 'src/lib/crawler'
+import { Contest } from './entities/contest.entity';
+import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class ContestService {
-    constructor() {}
+    constructor(
+        @InjectEntityManager()
+        private readonly entityManager: EntityManager,
+    ) {}
 
     async getinfo(): Promise<any>{
         return await ITContestCrawl();
     }
 
-    async createContest(contest: any): Promise<any> {
-        return await this.createContest(contest);
+    @Cron('0 3 * * *')
+    async insertContest(): Promise<any>{
+        const data = await this.getinfo();
+
+        if(!data){
+            throw new HttpException('Data Request Error', 501);
+        }
+
+        const contestRepository = this.entityManager.getRepository(Contest);
+        for(let i = 0; i < data.length; i++){
+            const contest = new Contest();
+            contest.title = data[i].title;
+            contest.host = data[i].host;
+            contest.target = data[i].target;
+            contest.register = data[i].register;
+            contest.status = data[i].status;
+            contest.dday = data[i].dday;
+            contest.url = data[i].url;
+            await contestRepository.save(contest);
+        }
+    }
+
+    async getContest(): Promise<any>{
+        const contestRepository = this.entityManager.getRepository(Contest);
+        return await contestRepository.find();
+    }
+
+    async clearDB(): Promise<any>{
+        const contestRepository = this.entityManager.getRepository(Contest);
+        await contestRepository.clear();
     }
 
 }
