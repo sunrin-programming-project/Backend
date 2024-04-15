@@ -29,6 +29,7 @@ export class AuthController {
             user = await this.userService.create(req.user);
         }
 
-        
+        this.authService.setRefreshToken({ user, res });
+        res.redirect('http://localhost:3000/api');
     }
 }
