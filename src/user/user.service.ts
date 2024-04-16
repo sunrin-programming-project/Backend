@@ -25,4 +25,24 @@ export class UserService {
         return await this.entityManager.save(newUser);
     }
     
+    async editUserInfo(user: any){
+        const newUser = await this.findOne(user.email);
+
+        if(!newUser){
+            throw new HttpException('User not found', 404);
+        }
+
+        newUser.email = user.email;
+        newUser.email_recieve = user.email_recieve;
+        newUser.field = user.field;
+
+        const result = await this.entityManager.save(newUser);
+
+        if(!result){
+            throw new HttpException('User not updated', 500);
+        }
+
+        return result;
+    }
+
 }

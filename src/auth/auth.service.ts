@@ -9,32 +9,33 @@ export class AuthService {
         private readonly jwtService: JwtService
     ){}
 
-    getAccessToken({ user }: any){
-        return this.jwtService.sign(
+    async getAccessToken({ user }: any){
+        const accessToken = this.jwtService.sign(
             { 
                 email: user.email,
                 name: user.name
             },
             {
-                secret: process.env.JWT_ACCESS_SECRET,
+                secret: process.env.JWT_SECRET,
                 expiresIn: '20m'
             }
         );
+
+        return accessToken;
     }
 
-    setRefreshToken({ user, res }){
+    async setRefreshToken({ user, res }){
         const refreshToken = this.jwtService.sign(
             {
                 email: user.email,
                 name: user.name
             },
             {
-                secret: process.env.JWT_REFRESH_SECRET,
+                secret: process.env.JWT_SECRET,
                 expiresIn: '7d'
             }
         );
-        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}`);
-        return;
+        return refreshToken;
     }
 
 }
