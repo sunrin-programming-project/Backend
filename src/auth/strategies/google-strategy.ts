@@ -10,8 +10,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         super({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_REDIRECT_URI,
-            Scope: ['email', 'profile']
+            callbackURL: process.env.GOOGLE_CALLBACK_URI,
+            scope: ['profile', 'email'],
         });
     }
 
@@ -20,12 +20,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         refreshToken: string,
         profile: Profile,
     ){
-        const { id, name, emails } = profile;
+        const { id, displayName, emails } = profile;
 
-        console.log(profile);
+        //console.log(profile);
 
         return {
-            name: name.displayName,
+            name: displayName,
             email: emails[0].value,
         };
     }

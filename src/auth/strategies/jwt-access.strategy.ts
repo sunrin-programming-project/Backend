@@ -14,7 +14,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access'){
         console.log(payload);
         return { 
             email: payload.email, 
-            username: payload.username 
+            name: payload.name
         };
     }
 }
