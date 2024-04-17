@@ -18,23 +18,29 @@ export class ContestService {
 
     @Cron('0 3 * * *')
     async insertContest(): Promise<any>{
+        const contestRepository = this.entityManager.getRepository(Contest);
         const data = await this.getinfo();
 
         if(!data){
             throw new HttpException('Data Request Error', 501);
         }
 
-        const contestRepository = this.entityManager.getRepository(Contest);
-        for(let i = 0; i < data.length; i++){
-            const contest = new Contest();
-            contest.title = data[i].title;
-            contest.host = data[i].host;
-            contest.target = data[i].target;
-            contest.register = data[i].register;
-            contest.status = data[i].status;
-            contest.dday = data[i].dday;
-            contest.url = data[i].url;
-            await contestRepository.save(contest);
+        const count = await contestRepository.count();
+
+        if(data.length === 0 || data.length != count){
+            await this.clearDB();
+
+            for(let i = 0; i < data.length; i++){
+                const contest = new Contest();
+                contest.title = data[i].title;
+                contest.host = data[i].host;
+                contest.target = data[i].target;
+                contest.register = data[i].register;
+                contest.status = data[i].status;
+                contest.dday = data[i].dday;
+                contest.url = data[i].url;
+                await contestRepository.save(contest);
+            }
         }
     }
 
