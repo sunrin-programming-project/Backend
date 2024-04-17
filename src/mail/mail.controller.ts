@@ -10,12 +10,9 @@ export class MailController {
     constructor(private readonly mailServeice:MailService) {}
 
     @ApiOperation({summary: 'Send Contest Mail'})
-    @ApiParam({name: 'email', required: true})
-    @ApiParam({name: 'name', required: true})
     @Get('contest')
     async sendContestMail() {
-        const contestData = await ITContestCrawl();
-        return await this.mailServeice.sendContestMail('op@ye0ngjae.com', {name: 'test', type: 'IT Contest' ,contest: contestData});
+        return await this.mailServeice.sendContestMail();
     }
     
 }

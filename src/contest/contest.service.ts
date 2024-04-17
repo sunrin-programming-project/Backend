@@ -1,9 +1,9 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager } from '@nestjs/typeorm';
 import { ITContestCrawl } from 'src/lib/crawler'
 import { Contest } from './entities/contest.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class ContestService {
@@ -12,11 +12,13 @@ export class ContestService {
         private readonly entityManager: EntityManager,
     ) {}
 
+    private readonly logger = new Logger(ContestService.name);
+
     async getinfo(): Promise<any>{
         return await ITContestCrawl();
     }
 
-    @Cron('0 3 * * *')
+    @Cron('0 0 3 * * *')
     async insertContest(): Promise<any>{
         const contestRepository = this.entityManager.getRepository(Contest);
         const data = await this.getinfo();

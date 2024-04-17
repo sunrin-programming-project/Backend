@@ -14,12 +14,6 @@ export class ContestController {
         return await this.contestservice.insertContest();
     }
 
-    @ApiOperation({summary: 'clear Contest Info'})
-    @Get('clear')
-    async clearDB(): Promise<any>{
-        return await this.contestservice.clearDB();
-    }
-
     @ApiOperation({summary: 'Get Contest Info'})
     @Get('get')
     async getContest(): Promise<any>{
