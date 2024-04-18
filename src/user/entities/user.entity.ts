@@ -3,6 +3,9 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 @Entity('user')
 export class User {
     @PrimaryColumn()
+    googleId: string;
+
+    @Column()
     email: string;
 
     @Column()
@@ -13,4 +16,7 @@ export class User {
 
     @Column()
     field: string;
+
+    @Column()
+    refresh_token: string;
 }

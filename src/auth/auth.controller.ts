@@ -2,15 +2,12 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { UserService } from 'src/user/user.service';
 import { IOAuthUser } from './interfaces/user.interface';
-import { CreateUserInput } from 'src/user/dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
     constructor(
         private authService: AuthService,
-        private userService: UserService,
     ){}
     
     @UseGuards(AuthGuard('google'))
@@ -22,23 +19,28 @@ export class AuthController {
     @UseGuards(AuthGuard('google'))
     @Get('google/callback')
     async googleAuthRedirect(@Req() req: Request & IOAuthUser, @Res() res: Response){
-        let user = await this.userService.findOne(req.user.email);
+        const { accessToken, refreshToken } = await this.authService.getJWT(req.user.googleId, req.user.email, req.user.name);
 
-        if(!user){
-            const input = {
-                email: req.user.email,
-                name: req.user.name,
-                email_recieve: false,
-                field: ''
-            };
+        res.cookie('accessToken', accessToken, { httpOnly: true });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
-            user = await this.userService.create(input);
-        }
+        return res.redirect('http://localhost:3000/auth/test');
+    }
 
-        const accessToken = this.authService.getAccessToken({ user });
-        const refreshToken = this.authService.setRefreshToken({ user, res });
-        res.cookie('refresh_token', refreshToken, { httpOnly: true });
-        res.cookie('access_token', accessToken, { httpOnly: true });
-        return res.redirect('http://localhost:3000/api');
+    @UseGuards(AuthGuard('jwt-access'))
+    @Get('test')
+    async test(@Req() req: Request & IOAuthUser, @Res() res: Response){
+        console.log(req.user.googleId);
+        console.log(req.user.email);
+        console.log(req.user.name);
+        return res.json(req.user);
+    }
+
+    @UseGuards(AuthGuard('jwt-access'))
+    @Get('logout')
+    async logout(@Req() req: Request & IOAuthUser, @Res() res: Response){
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
+        return res.redirect('http://localhost:3000/auth/test');
     }
 }

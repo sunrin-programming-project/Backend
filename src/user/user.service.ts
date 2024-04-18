@@ -1,5 +1,6 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -7,29 +8,34 @@ export class UserService {
         private readonly entityManager: EntityManager
     ){}
 
-    async findOne(email: string){
-        const user = await this.entityManager.getRepository('user')
-        return await user.findOne({
-            where: {email: email}
-        })
+    async findOne(google_id: string){
+        const user = await this.entityManager.getRepository('user');
+        const result = await user.findOne({
+            where: {googleId: google_id}
+        });
+
+        if(!result){
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        return result;
     }
 
     async create(user: any){
-        console.log(user);
         const newUser = this.entityManager.create('user', user);
 
         if(!newUser){
-            throw new HttpException('User not created', 500);
+            throw new HttpException('User not created', HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return await this.entityManager.save(newUser);
     }
     
     async editUserInfo(user: any){
-        const newUser = await this.findOne(user.email);
+        const newUser = await this.findOne(user.google_id);
 
         if(!newUser){
-            throw new HttpException('User not found', 404);
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
 
         newUser.email = user.email;
@@ -39,7 +45,32 @@ export class UserService {
         const result = await this.entityManager.save(newUser);
 
         if(!result){
-            throw new HttpException('User not updated', 500);
+            throw new HttpException('User not updated', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return result;
+    }
+
+    async findByRefreshToken(hashedRefreshToken: string){
+        const user = await this.entityManager.getRepository('user')
+        return await user.findOne({
+            where: {refresh_token: hashedRefreshToken}
+        })
+    }
+
+    async updateRefreshToken(google_id: string, refreshToken: string){
+        const user = await this.findOne(google_id);
+
+        if(!user){
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        user.refresh_token = refreshToken;
+
+        const result = await this.entityManager.save(user);
+
+        if(!result){
+            throw new HttpException('User not updated', HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return result;
