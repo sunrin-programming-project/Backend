@@ -13,8 +13,8 @@ export class AuthService {
     
     async getJWT(google_id: string, email: string, name: string){
         const user = await this.googleValidateUser(google_id, email, name);
-        const accessToken = await this.generateAccessToken(user.email, user.name);
-        const refreshToken = await this.generateRefreshToken(user.google_id, user.email, user.name);
+        const accessToken = await this.generateAccessToken(google_id, user.email, user.name);
+        const refreshToken = await this.generateRefreshToken(google_id, user.email, user.name);
 
         return { accessToken, refreshToken };
     }
@@ -38,8 +38,8 @@ export class AuthService {
         return newUser;
     }
 
-    async generateAccessToken(email: string, name: string){
-        const payload = { email, name };
+    async generateAccessToken(google_id: string, email: string, name: string){
+        const payload = { google_id, email, name };
         return this.jwtService.sign(payload, {
             secret: process.env.JWT_SECRET,
             expiresIn: '1d'
@@ -47,7 +47,7 @@ export class AuthService {
     }
 
     async generateRefreshToken(google_id: string, email: string, name: string){
-        const payload = { email, name };
+        const payload = { google_id, email, name };
         const refreshToken = this.jwtService.sign(payload, {
             secret: process.env.JWT_SECRET,
             expiresIn: '1d'
@@ -77,7 +77,7 @@ export class AuthService {
                 throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
             }
 
-            const accessToken = this.generateAccessToken(user.email, user.name);
+            const accessToken = this.generateAccessToken(user.google_id, user.email, user.name);
 
             return accessToken;
         }
