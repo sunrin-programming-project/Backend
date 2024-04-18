@@ -56,8 +56,6 @@ export class AuthService {
         const saltOrRounds = Number(process.env.SALT_ROUNDS);
         const hashedRefreshToken = await hash(refreshToken, saltOrRounds);
 
-        console.log('hashed refresh token: ' + hashedRefreshToken)
-
         await this.userService.updateRefreshToken(google_id, hashedRefreshToken);
 
         return refreshToken;

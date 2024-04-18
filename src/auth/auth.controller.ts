@@ -16,6 +16,7 @@ export class AuthController {
         return res.redirect
     }
 
+
     @UseGuards(AuthGuard('google'))
     @Get('google/callback')
     async googleAuthRedirect(@Req() req: Request & IOAuthUser, @Res() res: Response){
@@ -27,7 +28,7 @@ export class AuthController {
         return res.redirect('http://localhost:3000/auth/test');
     }
 
-    @UseGuards(AuthGuard('jwt-access'))
+    @UseGuards(AuthGuard('jwt'))
     @Get('test')
     async test(@Req() req: Request & IOAuthUser, @Res() res: Response){
         console.log(req.user.googleId);
@@ -36,7 +37,7 @@ export class AuthController {
         return res.json(req.user);
     }
 
-    @UseGuards(AuthGuard('jwt-access'))
+    @UseGuards(AuthGuard('jwt'))
     @Get('logout')
     async logout(@Req() req: Request & IOAuthUser, @Res() res: Response){
         res.clearCookie('accessToken');

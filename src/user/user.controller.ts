@@ -8,7 +8,7 @@ export class UserController {
         private userService: UserService
     ){}
 
-    @UseGuards(AuthGuard('jwt-access'))
+    @UseGuards(AuthGuard('jwt'))
     @Post('edit')
     async editUserInfo(user: any){
         return await this.userService.editUserInfo(user);
