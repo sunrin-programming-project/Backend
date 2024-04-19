@@ -25,16 +25,7 @@ export class AuthController {
         res.cookie('accessToken', accessToken, { httpOnly: true });
         res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
-        return res.redirect('http://localhost:3000/auth/test');
-    }
-
-    @UseGuards(AuthGuard('jwt'))
-    @Get('test')
-    async test(@Req() req: Request & IOAuthUser, @Res() res: Response){
-        console.log(req.user.googleId);
-        console.log(req.user.email);
-        console.log(req.user.name);
-        return res.json(req.user);
+        return res.redirect(process.env.FRONT_URL);
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -42,6 +33,6 @@ export class AuthController {
     async logout(@Req() req: Request & IOAuthUser, @Res() res: Response){
         res.clearCookie('accessToken');
         res.clearCookie('refreshToken');
-        return res.redirect('http://localhost:3000/auth/test');
+        return res.redirect(process.env.FRONT_URL);
     }
 }

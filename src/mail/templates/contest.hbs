@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>최신 대회•공모전 정보</title>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0;">
-    < style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+<body>
         <h1 style="color: #333333; text-align: center;">최신 대회•공모전 정보</h1>
         <p style="color: #666666; line-height: 1.5;">{{ name }}님, 최신 {{ type }} 대회•공모전 정보를 전달해드립니다.</p>
         {{#each contest as |item|}}
             <div class="box">
                 <div class="left">
+                  <!--
                     <div class="fields">
                         <div class="field">
                             <p>IT•소프트웨어•게임</p>
                             <p>과학•공학•기술</p>
                         </div>
-                    </div>
-                    <a href=" {{ item.url }}"><p>{{ item.title }}</p></a>
+                    </div> -->
+                    <a href="{{ item.url }}"><p>{{ item.title }}</p></a>
                     <div class="details">
                         <div class="detail">
                             <h6>주최 </h6>

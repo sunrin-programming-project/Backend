@@ -5,6 +5,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
 import { ContestService } from 'src/contest/contest.service';
+import { helpers } from 'handlebars';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { ContestService } from 'src/contest/contest.service';
       },
       template: {
         dir: process.cwd() + '/src/mail/templates/',
-        adapter: new HandlebarsAdapter(), 
+        adapter: new HandlebarsAdapter({}), 
         options: {  
           strict: true,
         },

@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { hash, compare } from 'bcrypt';
-import { CreateUserInput } from 'src/user/dto/user.dto';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -29,7 +28,7 @@ export class AuthService {
             email_recieve: false,
             field: '',
             refresh_token: ''
-        } as CreateUserInput;
+        };
 
         if(!newUser){
             newUser = await this.userService.create(input); 

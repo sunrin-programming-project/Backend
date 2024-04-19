@@ -31,8 +31,8 @@ export class UserService {
         return await this.entityManager.save(newUser);
     }
     
-    async editUserInfo(user: any){
-        const newUser = await this.findOne(user.google_id);
+    async editUserInfo(google_id: string, user: any){
+        const newUser = await this.findOne(google_id);
 
         if(!newUser){
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -53,9 +53,15 @@ export class UserService {
 
     async findByRefreshToken(hashedRefreshToken: string){
         const user = await this.entityManager.getRepository('user')
-        return await user.findOne({
+        const result = await user.findOne({
             where: {refresh_token: hashedRefreshToken}
         })
+
+        if(!result){
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        return result;
     }
 
     async updateRefreshToken(google_id: string, refreshToken: string){

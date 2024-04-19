@@ -23,10 +23,8 @@ export class MailService {
 
         const userList = await this.entityManager.getRepository('user').find({
             select: ['email', 'name'],
-            where: { email_recieve: false }
+            where: { email_recieve: true }
         });
-
-
 
         for(let i = 0; i < userList.length; i++){
             const email = userList[i].email;
