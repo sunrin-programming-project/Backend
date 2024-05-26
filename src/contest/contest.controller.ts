@@ -23,4 +23,17 @@ export class ContestController {
         }
         return contest;
     }
+
+    @ApiOperation({summary: 'Clear Contest Info'})
+    @Get('clear')
+    async clearDB(): Promise<any>{
+        return await this.contestservice.clearDB();
+    }
+
+    @ApiOperation({summary: 'Get Contest Info Crawl'})
+    @Get('crawl')
+    async getinfo(): Promise<any>{
+        return await this.contestservice.getinfo();
+    }
+
 }

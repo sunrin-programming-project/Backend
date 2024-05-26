@@ -46,7 +46,8 @@ async function ITContestCrawl(): Promise<ContestList[]> {
         "Txt_code1[]": "29",
         "Txt_bname": "IT•소프트웨어•게임",
         "Txt_key": "all",
-        "Txt_word": ""
+        "Txt_word": "",
+        "page":"1"
     });
 
     return await contestkorea_crawl(contestkorea_data);

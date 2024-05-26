@@ -18,18 +18,26 @@ export class ContestService {
         return await ITContestCrawl();
     }
 
+    // 대회 정보 DB 저장
     @Cron('0 0 3 * * *')
     async insertContest(): Promise<any>{
         const contestRepository = this.entityManager.getRepository(Contest);
-        const data = await this.getinfo();
+
+        var data = [];
+        for(let i = 0 ; i < 2 ; i++){
+            
+        }
+        data = await this.getinfo();
 
         if(!data){
             throw new HttpException('Data Request Error', 501);
         }
 
-        const count = await contestRepository.count();
+        const dbData = await contestRepository.find();
 
-        if(data.length === 0 || data.length != count){
+        console.log(dbData, dbData.length);
+
+        if(data.length === 0 || data != dbData){
             await this.clearDB();
 
             for(let i = 0; i < data.length; i++){
@@ -46,11 +54,13 @@ export class ContestService {
         }
     }
 
+    // 대회 정보 DB 조회
     async getContest(): Promise<any>{
         const contestRepository = this.entityManager.getRepository(Contest);
         return await contestRepository.find();
     }
 
+    // 대회 정보 DB 삭제
     async clearDB(): Promise<any>{
         const contestRepository = this.entityManager.getRepository(Contest);
         await contestRepository.clear();
