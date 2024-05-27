@@ -30,7 +30,8 @@ const filter_list = [
     '요리•음식•식품'
 ]
 
-async function ITContestCrawl(): Promise<ContestList[]> {
+// IT•소프트웨어•게임 대회 크롤링
+async function ITContestCrawl(page: string): Promise<ContestList[]> {
     const contestkorea_data = new URLSearchParams({
         "RetrieveFlag": "",
         "int_gbn": "1",
@@ -47,7 +48,7 @@ async function ITContestCrawl(): Promise<ContestList[]> {
         "Txt_bname": "IT•소프트웨어•게임",
         "Txt_key": "all",
         "Txt_word": "",
-        "page":"1"
+        "page": page
     });
 
     return await contestkorea_crawl(contestkorea_data);
@@ -77,6 +78,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
 
     let contest_link = [];
 
+    // 대회 링크 가져오기
     for (let i = 0; i < hrefTags.length; i++) {
         let ContestLinkURL: string = `https://www.contestkorea.com/sub/view.php?str_no=${hrefTags[i]}`;
         let response = await fetch(ContestLinkURL, {
@@ -95,12 +97,14 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
         }
     }
     
+    // 필터링
     let filteredArr: string[] = contest_list.filter(function(item: string) {
         return item !== undefined && item !== undefined && item !== null && item.trim() !== '';
     });
 
     let contest: ContestList[] = [];
 
+    // 필터링된 배열에서 필요없는 문자열 제거
     for(let i = 0; i < filteredArr.length; i++) {
         if(filteredArr[i] === '￦ 유료 ') {
             filteredArr.splice(i, 2);
@@ -112,6 +116,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
         }
       }
 
+    // 필터링된 배열에서 대회 정보 추출
     for(let i = 0; i < filteredArr.length; i += 9) {
         if (filteredArr[i]) {
             let url = contest_link[i/9];
@@ -122,6 +127,7 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             let status = filteredArr[i+8] ? filteredArr[i+8] : '';
             let dday = 'D'+filteredArr[i+7] ? 'D'+filteredArr[i+7] : '';
             
+            // 대회 정보 객체에 저장
             contest.push({
               url: url,
               title: title,

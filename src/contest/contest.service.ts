@@ -14,8 +14,8 @@ export class ContestService {
 
     private readonly logger = new Logger(ContestService.name);
 
-    async getinfo(): Promise<any>{
-        return await ITContestCrawl();
+    async getinfo(page: string): Promise<any>{
+        return await ITContestCrawl(page);
     }
 
     // 대회 정보 DB 저장
@@ -24,22 +24,29 @@ export class ContestService {
         const contestRepository = this.entityManager.getRepository(Contest);
 
         var data = [];
-        for(let i = 0 ; i < 2 ; i++){
-            
+        for(let i = 1 ; i <= 3 ; i++){
+            let crawl_data = await this.getinfo(i.toString());    
+            data.push(...crawl_data);
+
+            if(crawl_data.length < 12){
+                break;
+            }
         }
-        data = await this.getinfo();
 
-        if(!data){
-            throw new HttpException('Data Request Error', 501);
+        if(data.length === 0){
+            throw new HttpException('No Contest Info', 404);
         }
 
-        const dbData = await contestRepository.find();
-
-        console.log(dbData, dbData.length);
+        const dbData = await contestRepository.createQueryBuilder("contest")
+        .addSelect("CONVERT(SUBSTRING(contest.dday, 3), UNSIGNED INTEGER)", "dday_number")
+        .orderBy("dday_number", "ASC")
+        .addOrderBy("contest.title", "ASC")
+        .getMany();
 
         if(data.length === 0 || data != dbData){
             await this.clearDB();
 
+            
             for(let i = 0; i < data.length; i++){
                 const contest = new Contest();
                 contest.title = data[i].title;
@@ -57,7 +64,11 @@ export class ContestService {
     // 대회 정보 DB 조회
     async getContest(): Promise<any>{
         const contestRepository = this.entityManager.getRepository(Contest);
-        return await contestRepository.find();
+        return await contestRepository.createQueryBuilder("contest")
+            .addSelect("CONVERT(SUBSTRING(contest.dday, 3), UNSIGNED INTEGER)", "dday_number")
+            .orderBy("dday_number", "ASC")
+            .addOrderBy("contest.title", "ASC")
+            .getMany();
     }
 
     // 대회 정보 DB 삭제

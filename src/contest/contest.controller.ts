@@ -33,7 +33,7 @@ export class ContestController {
     @ApiOperation({summary: 'Get Contest Info Crawl'})
     @Get('crawl')
     async getinfo(): Promise<any>{
-        return await this.contestservice.getinfo();
+        return await this.contestservice.getinfo("1");
     }
 
 }
