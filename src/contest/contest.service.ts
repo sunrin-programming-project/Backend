@@ -1,7 +1,7 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { ITContestCrawl } from 'src/lib/crawler'
+import { ITContestCrawl, allcon_crawl } from 'src/lib/crawler'
 import { Contest } from './entities/contest.entity';
 import { EntityManager } from 'typeorm';
 
@@ -16,6 +16,10 @@ export class ContestService {
 
     async getinfo(page: string): Promise<any>{
         return await ITContestCrawl(page);
+    }
+
+    async getinfo2(): Promise<any>{
+        return await allcon_crawl();
     }
 
     // 대회 정보 DB 저장

@@ -36,4 +36,10 @@ export class ContestController {
         return await this.contestservice.getinfo("1");
     }
 
+    @ApiOperation({summary: 'Get Contest Info Crawl'})
+    @Get('crawl2')
+    async getinfo2(): Promise<any>{
+        return await this.contestservice.getinfo2();
+    }
+
 }

@@ -143,6 +143,23 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
     return contest;
 }
 
+async function allcon_crawl(){
+    const url = "https://www.all-con.co.kr/list/contest/3/1?sortname=cl_order&sortorder=asc&stx=&sfl=&t=3&ct=4&sc=23&tg=7";
+
+    let response = await fetch(url, {
+        method: "GET"
+    });
+
+    let htmlString: string = await response.text();
+    let dom = new JSDOM(htmlString);
+
+    let contest_list: string[] = dom.window.document.querySelector('tbl-list')
+
+    console.log(contest_list);
+
+}
+
 export {
-    ITContestCrawl
+    ITContestCrawl,
+    allcon_crawl
 };
