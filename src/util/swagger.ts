@@ -6,7 +6,6 @@ export function setupSwagger(app: INestApplication) {
         .setTitle('Contest API')
         .setDescription('The Contest API description')
         .setVersion('1.0')
-        .addTag('contest')
         .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);

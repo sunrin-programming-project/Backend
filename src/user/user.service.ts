@@ -82,4 +82,12 @@ export class UserService {
         return result;
     }
 
+    async getAllUser(){
+        const user = await this.entityManager.getRepository('user');
+        if(!user){
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        return await user.find();
+    }
 }
