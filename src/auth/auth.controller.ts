@@ -37,4 +37,10 @@ export class AuthController {
         res.clearCookie('refreshToken');
         return res.redirect(process.env.FRONT_URL);
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('status')
+    async checkStatus(@Req() req: Request & IOAuthUser, @Res() res: Response){
+        return res.json({status: 'ok', user: req.user});
+    }
 }
