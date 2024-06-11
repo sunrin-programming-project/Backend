@@ -34,6 +34,8 @@ export class AuthService {
             newUser = await this.userService.create(input); 
         }
 
+        let User = await this.userService.findOne(google_id);
+
         return newUser;
     }
 

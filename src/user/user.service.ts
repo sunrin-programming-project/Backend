@@ -14,10 +14,6 @@ export class UserService {
             where: {googleId: google_id}
         });
 
-        if(!result){
-            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        }
-
         return result;
     }
 
