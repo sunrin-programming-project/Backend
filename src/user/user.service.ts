@@ -34,11 +34,16 @@ export class UserService {
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
 
+        if(user.email == undefined || user.email == null){
+            user.email = newUser.email;
+            
+        }
+
         newUser.email = user.email;
         newUser.email_recieve = user.email_recieve;
         newUser.field = user.field;
 
-        const result = await this.entityManager.save(newUser);
+        const result = await this.entityManager.update('user', {googleId: google_id}, newUser);
 
         if(!result){
             throw new HttpException('User not updated', HttpStatus.INTERNAL_SERVER_ERROR);
