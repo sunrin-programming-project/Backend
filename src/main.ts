@@ -8,6 +8,11 @@ async function bootstrap() {
 
   setupSwagger(app);
 
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
+
   app.use(cookieParser());
   await app.listen(3000);
 }
