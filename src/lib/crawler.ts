@@ -128,15 +128,20 @@ async function contestkorea_crawl(data: URLSearchParams): Promise<ContestList[]>
             let dday = 'D'+filteredArr[i+7] ? 'D'+filteredArr[i+7] : '';
             
             // 대회 정보 객체에 저장
-            contest.push({
-              url: url,
-              title: title,
-              host: host,
-              target: target,
-              register: register,
-              status: status,
-              dday: dday
-            });
+            if(dday.length > 5 || dday === undefined || title === undefined || host === undefined || target === undefined || register === undefined || status === undefined){
+                continue;
+            }
+            else{
+                contest.push({
+                url: url,
+                title: title,
+                host: host,
+                target: target,
+                register: register,
+                status: status,
+                dday: dday
+                });
+            }
         }
     }
 
